@@ -1,12 +1,20 @@
+//server.js
+
 import 'dotenv/config';
 import { connectDB } from './db.js';
 import Fastify from 'fastify';
 const fastify = Fastify({ logger: false });
 import formbody from '@fastify/formbody';
+import cors from '@fastify/cors';
 
 import authRoutes from './authRoutes.js';
 import fastifyJwt from '@fastify/jwt';
 import oauthPlugin from '@fastify/oauth2';
+
+fastify.register(cors, {
+    origin: 'http://localhost:5173', // Vite default port
+    credentials: true
+});
 
 fastify.register(fastifyJwt, {
     secret: process.env.JWT_SECRET

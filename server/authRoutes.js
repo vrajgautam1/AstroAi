@@ -1,3 +1,5 @@
+//authRoutes.js
+
 import bcrypt from 'bcrypt';
 import { getUsersCollection } from './db.js';
 import { sendVerificationEmail } from './emailService.js';
@@ -88,6 +90,24 @@ async function authRoutes(fastify, options) {
         }
     });
 
+    fastify.post('/logout', async (request, reply) => {
+        try {
+            await request.jwtVerify();
+            return reply.send({ message: "Logged out successfully" });
+        } catch (err) {
+            return reply.code(401).send({ error: "Unauthorized" });
+        }
+    });
+
+    fastify.post('/logout', async (request, reply) => {
+        try {
+            await request.jwtVerify();
+            return reply.send({ message: "Logged out successfully" });
+        } catch (err) {
+            return reply.code(401).send({ error: "Unauthorized" });
+        }
+    });
+
     fastify.get('/verify', async (request, reply) => {
         const token = request.query.token;
 
@@ -119,15 +139,20 @@ async function authRoutes(fastify, options) {
 
     fastify.get('/google/callback', async (request, reply) => {
         try {
-            const token = await fastify.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(request);
+            const { token } = await fastify.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(request);
 
             const userResponse = await fetch('https://openidconnect.googleapis.com/v1/userinfo', {
                 headers: { Authorization: `Bearer ${token.access_token}` }
             });
             const profile = await userResponse.json();
 
+            if (!userResponse.ok) {
+                console.error("Google userinfo failed:", profile);
+                return reply.code(401).send({ error: "Failed to fetch user profile from Google" });
+            }
+
             const email = profile.email;
-            const googleId = profile.id;
+            const googleId = profile.sub || profile.id;
 
             const usersCol = getUsersCollection();
             let user = await usersCol.findOne({ email });
@@ -155,7 +180,7 @@ async function authRoutes(fastify, options) {
             }
 
             const jwtToken = fastify.jwt.sign({ userId: user._id, email: user.email });
-            return reply.send({ token: jwtToken });
+            return reply.redirect(`http://localhost:5173/dashboard?token=${jwtToken}`);
         } catch (err) {
             return reply.code(500).send({ error: "Google OAuth failed", details: err.message });
         }
