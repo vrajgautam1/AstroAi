@@ -20,6 +20,6 @@ const userSchema = {
     createdAt: { type: "date", default: Date.now }
 };
 
-module.exports = {
+export {
     userSchema
 };

@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+import { MongoClient } from 'mongodb';
 
 let dbInstance;
 
@@ -40,5 +40,4 @@ function getUsersCollection() {
   }
   return dbInstance.collection("users");
 }
-
-module.exports = { connectDB, getUsersCollection };
+export { connectDB, getUsersCollection };

@@ -1,16 +1,41 @@
-require('dotenv').config();
-const { connectDB } = require('./db');
-const fastify = require('fastify')({ logger: false });
+import 'dotenv/config';
+import { connectDB } from './db.js';
+import Fastify from 'fastify';
+const fastify = Fastify({ logger: false });
+import formbody from '@fastify/formbody';
 
-const authRoutes = require('./authRoutes');
+import authRoutes from './authRoutes.js';
+import fastifyJwt from '@fastify/jwt';
+import oauthPlugin from '@fastify/oauth2';
 
-fastify.register(require('@fastify/jwt'), {
+fastify.register(fastifyJwt, {
     secret: process.env.JWT_SECRET
+});
+
+fastify.register(oauthPlugin, {
+    name: 'googleOAuth2',
+    scope: ['profile', 'email'],
+    credentials: {
+        client: {
+            id: process.env.GOOGLE_CLIENT_ID,
+            secret: process.env.GOOGLE_CLIENT_SECRET
+        },
+        auth: {
+            authorizeHost: 'https://accounts.google.com',
+            authorizePath: '/o/oauth2/v2/auth',
+            tokenHost: 'https://oauth2.googleapis.com',
+            tokenPath: '/token'
+        }
+    },
+    startRedirectPath: '/auth/google',
+    callbackUri: 'http://localhost:3000/auth/google/callback'
 });
 
 fastify.get('/', async (request, reply) => {
     return { status: "server running" };
 });
+
+fastify.register(formbody);
 
 fastify.register(authRoutes, { prefix: '/auth' });
 
