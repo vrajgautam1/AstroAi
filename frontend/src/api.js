@@ -53,20 +53,3 @@ export async function logoutUser(token) {
 
     return result;
 }
-
-export async function logoutUser(token) {
-    const response = await fetch(`${BASE_URL}/auth/logout`, {
-        method: 'POST',
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-        throw new Error(result.error || 'Logout failed');
-    }
-
-    return result;
-}

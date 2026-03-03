@@ -99,15 +99,6 @@ async function authRoutes(fastify, options) {
         }
     });
 
-    fastify.post('/logout', async (request, reply) => {
-        try {
-            await request.jwtVerify();
-            return reply.send({ message: "Logged out successfully" });
-        } catch (err) {
-            return reply.code(401).send({ error: "Unauthorized" });
-        }
-    });
-
     fastify.get('/verify', async (request, reply) => {
         const token = request.query.token;
 

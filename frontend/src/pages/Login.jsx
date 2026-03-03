@@ -31,8 +31,8 @@ function Login() {
 
             <div className="relative w-full max-w-[400px] bg-white/[0.05] backdrop-blur-xl p-8 rounded-2xl shadow-[0_0_40px_rgba(99,102,241,0.1)] border border-white/10 z-10 transition-all duration-300">
                 <div className="text-center mb-8">
-                    <h2 className="text-2xl font-bold tracking-tight text-white/90">Welcome Back to AstroAPI</h2>
-                    <p className="text-indigo-200/60 text-sm mt-2 font-medium">Access your planetary data layer</p>
+                    <h2 className="text-2xl font-bold tracking-tight text-white/90">Welcome back!</h2>
+                    <p className="text-indigo-200/60 text-sm mt-2 font-medium">Please sign in to your account</p>
                 </div>
 
                 {error && (
@@ -56,7 +56,7 @@ function Login() {
 
                 <div className="relative flex items-center justify-center mb-6 opacity-60">
                     <div className="absolute border-t border-white/10 w-full"></div>
-                    <span className="bg-[#0f172a] px-3 text-[11px] uppercase tracking-wider text-indigo-200/60 relative font-semibold">
+                    <span className="bg-[#0f172a] rounded-lg px-3 text-[11px] uppercase tracking-wider text-indigo-200/60 relative font-semibold">
                         Or continue with email
                     </span>
                 </div>
@@ -82,12 +82,12 @@ function Login() {
                         type="submit"
                         className="w-full h-[44px] mt-2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl font-medium hover:from-indigo-500 hover:to-violet-500 hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] transition-all duration-300 active:scale-[0.98]"
                     >
-                        Access Data Layer
+                        Sign In
                     </button>
                 </form>
 
                 <p className="text-center text-sm text-indigo-200/50 mt-8 font-medium">
-                    Need access credentials? <Link to="/register" className="text-indigo-400 hover:text-indigo-300 hover:drop-shadow-[0_0_5px_rgba(99,102,241,0.5)] transition-all duration-300">Initialize here</Link>
+                    Don't have an account? <Link to="/register" className="text-indigo-400 hover:text-indigo-300 hover:drop-shadow-[0_0_5px_rgba(99,102,241,0.5)] transition-all duration-300">Sign up here</Link>
                 </p>
             </div>
         </div>
